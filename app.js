@@ -36,6 +36,8 @@
         const resetBtn = document.getElementById("resetBtn");
         const legend = document.querySelector(".legend");
         const toolbar = document.querySelector(".toolbar");
+        const homeBtn = document.getElementById("homeBtn");
+        const mapBtn = document.getElementById("mapBtn");
         const graphViewport = document.querySelector(".graph-viewport");
         
         const requiredElements = {
@@ -69,7 +71,14 @@
         }
 
         // Estado de navegación.
-        let activeTree = initialTree;
+        const params = new URLSearchParams(window.location.search);
+        const requestedTree = params.get("tree");
+        const requestedNode = params.get("node");
+        let activeTree =
+            requestedTree && trees[requestedTree]
+                ? requestedTree
+                : initialTree;
+
         let selected = null;
         let positions = {};
         const history = [];
@@ -116,7 +125,7 @@
         function setZoom(nextZoom, event = null) {
             const previousZoom = zoomLevel;
 
-            zoomLevel = Math.max(0.5, Math.min(3, nextZoom));
+            zoomLevel = Math.max(0.05, Math.min(3, nextZoom));
 
             if (zoomLevel === previousZoom) return;
 
@@ -147,9 +156,39 @@
             });
         }
 
+        function fitGraphToViewport() {
+            const viewBox = svg.viewBox.baseVal;
+            const availableWidth = graphViewport.clientWidth;
+            const availableHeight = graphViewport.clientHeight;
+
+            const baseWidth = Math.max(availableWidth, 760);
+            const baseHeight = baseWidth * viewBox.height / viewBox.width;
+
+            zoomLevel = Math.min(
+                1,
+                availableWidth / baseWidth,
+                availableHeight / baseHeight
+            );
+
+            svg.style.width = `${100 * zoomLevel}%`;
+            svg.style.minWidth = `${760 * zoomLevel}px`;
+        }
+
         function scrollGraphToBottom() {
             requestAnimationFrame(() => {
-                graphViewport.scrollTop = graphViewport.scrollHeight;
+                const node = selected
+                    ? nodeGroup.querySelector(`.node[data-id="${selected}"]`)
+                    : null;
+
+                if (node) {
+                    node.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                        inline: "center"
+                    });
+                } else {
+                    graphViewport.scrollTop = graphViewport.scrollHeight;
+                }
             });
         }
 
@@ -425,6 +464,7 @@
 
             showInitialPanel();
             draw();
+            fitGraphToViewport();
 
             // Cuando el portal especifica un nodo de entrada, lo resaltamos
             // y mostramos su ficha para que la continuidad sea evidente.
@@ -485,6 +525,14 @@
         searchInput.addEventListener("input", () => applyFilter(true));
 
         resetBtn.addEventListener("click", resetCurrentTree);
+
+        homeBtn.addEventListener("click", () => {
+            window.location.href = "index.html";
+        });
+
+        mapBtn.addEventListener("click", () => {
+            window.location.href = "mapa.html";
+        });
 
         treeBtn.addEventListener("click", () => {
             if (!legend) return;
@@ -569,6 +617,10 @@
         backBtn.style.display = "none";
         showInitialPanel();
         draw();
+        fitGraphToViewport();
+        if (requestedNode && currentMap()[requestedNode]) {
+            selectPerson(requestedNode);
+        }
         scrollGraphToBottom();
     }
 

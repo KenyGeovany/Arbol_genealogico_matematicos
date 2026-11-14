@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explorador interactivo de genealogías matemáticas.">
+    <title>Genealogía matemática</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <p class="eyebrow">Archivo de genealogías matemáticas</p>
+            <h1>Genealogía de Matemáticos</h1>
+            <p class="intro">
+                Explora las conexiones del esquema genealógico. Selecciona un matemático
+                para consultar su ficha o utiliza los símbolos ∞ enlazados para recorrer
+                los distintos fragmentos.
+            </p>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <section>
+            <nav class="site-nav" aria-label="Navegación principal">
+                <button id="homeBtn" class="button button-secondary active" type="button">
+                    Inicio
+                </button>
+                <button id="mapBtn" class="button button-secondary active" type="button">
+                    Mapa
+                </button>
+                <button id="treeBtn" class="button button-secondary active" type="button">
+                    Ir al diagrama
+                </button>
+            </nav>
+        </section>
+
+        <section class="toolbar" aria-label="Controles del diagrama">
+            <label class="search-box" for="search">
+                <span class="search-label">Buscar matemático</span>
+                <input
+                    id="search"
+                    type="search"
+                    placeholder="Ej. Hilbert, Poincaré …"
+                    autocomplete="off"
+                >
+            </label>
+
+            <button id="resetBtn" class="button button-quiet" type="button">
+                Restablecer
+            </button>
+
+            <div class="toolbar-main">
+                <button id="backBtn" class="button button-secondary" type="button" style="display: none;">
+                    ← Fragmento anterior
+                </button>
+            </div>
+        </section>
+
+        <div class="legend" aria-label="Leyenda">
+            <span class="legend-item">
+                <span class="legend-line" aria-hidden="true"></span>
+                Conexión dibujada en el esquema
+            </span>
+            <span class="legend-item">
+                <span class="legend-infinity" aria-hidden="true ">∞</span>
+                Antecedente o continuación
+            </span>
+        </div>
+
+        <section class="workspace" aria-label="Diagrama genealógico y ficha del matemático">
+            <section class="diagram-card">
+                <div class="diagram-heading">
+                    <div>
+                        <p class="section-kicker">Fragmento activo</p>
+                        <h2 id="viewLabel">Genealogía de Terence Tao</h2>
+                    </div>
+                    <span class="diagram-hint">Selecciona un nodo</span>
+                </div>
+
+                <div class="graph-viewport">
+                    <svg
+                            id="graph"
+                        viewBox="0 0 1120 1500"
+                        role="img"
+                        aria-label="Diagrama interactivo de ascendencia matemática"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <defs>
+                            <marker
+                                id="arrow"
+                                viewBox="0 0 10 10"
+                                refX="8"
+                                refY="5"
+                                markerWidth="7"
+                                markerHeight="7"
+                                orient="auto-start-reverse"
+                            >
+                                <path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead"></path>
+                            </marker>
+                        </defs>
+                        <g id="edges"></g>
+                        <g id="nodes"></g>
+                    </svg>
+                </div>
+            </section>
+
+            <aside class="panel-card" id="panel" aria-live="polite">
+                <div class="hint">
+                    Selecciona un matemático en el diagrama para abrir su ficha.
+                </div>
+                <div class="portrait" aria-hidden="true">∞</div>
+                <p class="hint">
+                    Los símbolos ∞ sin enlace representan antecedentes no especificados.
+                </p>
+            </aside>
+        </section>
+
+        <p class="editorial-note">
+            Nota: las flechas reproducen las conexiones del esquema proporcionado.
+            No implican por sí mismas una relación formal de dirección doctoral,
+            mentoría o supervisión académica históricamente verificada.
+        </p>
+    </main>
+
+    <footer class="site-footer">
+        <p>Proyecto de genealogías matemáticas · Datos sujetos a revisión histórica.</p>
+    </footer>
+
+    <!-- Carga primero los datos y después la lógica de la aplicación. -->
+    <script src="Tree_data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

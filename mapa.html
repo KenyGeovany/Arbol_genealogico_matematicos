@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mapa de acceso a las genealogías de matemáticos nodales.">
+    <title>Mapa de matemáticos · Genealogías Matemáticas</title>
+    <link rel="stylesheet" href="mapa.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <p class="eyebrow">Archivo de genealogías matemáticas</p>
+            <h1>Mapa de matemáticos </h1>
+            <p class="intro">
+                Explora los matemáticos que identifican los fragmentos genealógicos.
+                Selecciona un nodo para abrir su fragmento correspondiente en el visor.
+            </p>
+            <div class="header-meta">
+                <span id="nodeCount">— matemáticos nodales</span>
+                <!-- <span id="fragmentCount"></span> -->
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <nav class="site-nav" aria-label="Navegación principal">
+            <a class="nav-link" href="index.html">Inicio</a>
+            <a class="nav-link active" href="mapa.html" aria-current="page">Mapa</a>
+        </nav>
+
+        <section class="intro-section">
+            <div>
+                <p class="section-kicker">Red de acceso</p>
+                <h2>Una entrada directa a cada genealogía</h2>
+                <p class="section-description">
+                    Los nodos se obtienen automáticamente: en cada fragmento se toma
+                    el matemático situado más abajo (mayor coordenada <code>y</code>).
+                    Los enlaces reproducen las rutas de navegación declaradas mediante
+                    los portales del visor.
+                </p>
+            </div>
+            <div class="map-legend" aria-label="Leyenda">
+                <span><i class="legend-dot"></i> Genealogía disponible</span>
+                <span><i class="legend-route"></i> Ruta entre fragmentos</span>
+            </div>
+        </section>
+
+        <section class="map-toolbar" aria-label="Buscar matemático nodal">
+            <label class="search-control" for="nodeSearch">
+                <span>Buscar <matemático></matemático></span>
+                <input
+                    id="nodeSearch"
+                    type="search"
+                    placeholder="Nombre del matemático…"
+                    autocomplete="off"
+                >
+            </label>
+            <button id="clearNodeSearch" class="clear-button" type="button">
+                Limpiar búsqueda
+            </button>
+            <span id="mapStatus" class="map-status" aria-live="polite">Preparando mapa…</span>
+        </section>
+
+        <section class="map-card" aria-label="Mapa interactivo de genealogías">
+            <div class="map-card-heading">
+                <div>
+                    <p class="section-kicker">Explorador</p>
+                    <h2>Matemáticos</h2>
+                </div>
+                <span class="diagram-hint">Haz clic en un nodo para abrir el visor</span>
+            </div>
+            <div class="map-viewport" id="mapViewport">
+                <svg
+                    id="nodalMap"
+                    viewBox="0 0 1100 620"
+                    role="group"
+                    aria-label="Red navegable de matemáticos nodales"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <defs>
+                        <marker
+                            id="routeArrow"
+                            viewBox="0 0 10 10"
+                            refX="8"
+                            refY="5"
+                            markerWidth="7"
+                            markerHeight="7"
+                            orient="auto-start-reverse"
+                        >
+                            <path d="M 0 0 L 10 5 L 0 10 z" class="route-arrowhead"></path>
+                        </marker>
+                    </defs>
+                    <g id="mapEdges"></g>
+                    <g id="mapNodes"></g>
+                </svg>
+            </div>
+            <div id="mapEmpty" class="empty-state" hidden>
+                <strong>No se encontraron matemáticos.</strong>
+                <span>Prueba con otro nombre.</span>
+            </div>
+        </section>
+
+        <aside class="editorial-note">
+            <strong>Cómo interpretar el mapa.</strong>
+            Las líneas representan rutas de navegación entre fragmentos, no relaciones
+            de dirección doctoral, mentoría o supervisión académica. El mapa se construye
+            automáticamente a partir de los fragmentos y portales de <code>Tree_data.js</code>.
+            Para que un matemático aparezca como nodal, debe estar situado en la parte
+            inferior de al menos un fragmento.
+        </aside>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <span>Proyecto de genealogías matemáticas</span>
+            <span><a href="index.html">Volver al índice Fields ↑</a></span>
+        </div>
+    </footer>
+
+    <!-- Tree_data.js define los fragmentos; mapa.js construye el mapa a partir de ellos. -->
+    <script src="Tree_data.js"></script>
+    <script src="mapa.js"></script>
+</body>
+</html>
