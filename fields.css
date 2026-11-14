@@ -1,0 +1,352 @@
+:root {
+    --ink: #17243a;
+    --muted: #65758b;
+    --paper: #f4f6f8;
+    --surface: #ffffff;
+    --line: #dce3e9;
+    --accent: #315b82;
+    --accent-soft: #eaf1f7;
+    --gold: #a97832;
+    --shadow: 0 12px 30px rgba(23, 36, 58, 0.055);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    margin: 0;
+    color: var(--ink);
+    background: var(--paper);
+    font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+a { color: inherit; }
+
+.site-header {
+    color: #fff;
+    background: linear-gradient(118deg, #17243a 0%, #244563 100%);
+    padding: 48px 0 38px;
+}
+
+.header-inner,
+.page-content,
+.footer-inner {
+    width: min(1440px, calc(100% - 56px));
+    margin: 0 auto;
+}
+
+.eyebrow,
+.section-kicker {
+    margin: 0 0 9px;
+    color: #9db6ca;
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.site-header h1 {
+    max-width: 850px;
+    margin: 0;
+    font: 500 clamp(2.2rem, 5vw, 4rem)/1.04 Georgia, "Times New Roman", serif;
+    letter-spacing: -0.035em;
+}
+
+.site-header h1 em { color: #d9e7f2; font-weight: 400; }
+
+.intro {
+    max-width: 820px;
+    margin: 18px 0 0;
+    color: #d6e0e9;
+    font-size: 1rem;
+}
+
+.header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 25px;
+}
+
+.header-meta span {
+    padding: 6px 10px;
+    color: #e0e9f0;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    font-size: 0.72rem;
+}
+
+.site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    padding: 18px 0 4px;
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 8px 14px;
+    color: #42566b;
+    background: #e8edf2;
+    border: 1px solid #e0e6eb;
+    border-radius: 9px;
+    font-size: 0.82rem;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.nav-link.active {
+    color: #fff;
+    background: var(--ink);
+    border-color: var(--ink);
+}
+
+.nav-link.disabled {
+    color: #8290a0;
+    background: #edf0f3;
+    cursor: default;
+}
+
+.intro-section {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 35px 0 21px;
+}
+
+.intro-section .section-kicker,
+.catalog-heading .section-kicker { color: var(--accent); }
+
+.intro-section h2,
+.catalog-heading h2 {
+    margin: 0;
+    font: 500 clamp(1.55rem, 3vw, 2.2rem)/1.15 Georgia, "Times New Roman", serif;
+    letter-spacing: -0.02em;
+}
+
+.section-description {
+    max-width: 860px;
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.source-link {
+    flex: 0 0 auto;
+    margin-bottom: 3px;
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.7fr;
+    gap: 13px;
+    margin: 10px 0 32px;
+}
+
+.stat-card {
+    min-height: 125px;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    box-shadow: var(--shadow);
+}
+
+.stat-label,
+.stat-foot { display: block; color: var(--muted); }
+.stat-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; }
+.stat-value { display: block; margin-top: 4px; font: 500 2.25rem/1.1 Georgia, "Times New Roman", serif; }
+.stat-foot { margin-top: 8px; font-size: 0.74rem; }
+.stat-feature { display: block; margin-top: 11px; font: 500 1.35rem/1.15 Georgia, "Times New Roman", serif; }
+
+.catalog-section {
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+}
+
+.catalog-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 23px 24px 18px;
+}
+
+.result-count { color: var(--muted); font-size: 0.78rem; white-space: nowrap; }
+
+.filters {
+    display: grid;
+    grid-template-columns: minmax(240px, 1.5fr) minmax(145px, 0.7fr) minmax(190px, 1fr) auto;
+    align-items: end;
+    gap: 12px;
+    padding: 16px 24px 19px;
+    background: #f7f9fb;
+    border-top: 1px solid #edf1f4;
+    border-bottom: 1px solid var(--line);
+}
+
+.search-control,
+.select-control { display: grid; gap: 6px; min-width: 0; }
+.search-control span,
+.select-control span { color: #52667b; font-size: 0.72rem; font-weight: 700; }
+
+.search-control input,
+.select-control select {
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 11px;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid #cfd8e0;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.82rem;
+}
+
+.search-control input:focus,
+.select-control select:focus,
+.clear-button:focus-visible,
+.genealogy-link:focus-visible,
+.nav-link:focus-visible {
+    outline: 3px solid rgba(49, 91, 130, 0.22);
+    outline-offset: 2px;
+}
+
+.clear-button {
+    min-height: 42px;
+    padding: 9px 13px;
+    color: #53677b;
+    background: #fff;
+    border: 1px solid #cfd8e0;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.79rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.clear-button:hover { background: #edf2f6; }
+
+.table-wrap { width: 100%; overflow-x: auto; }
+.medal-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.medal-table th {
+    padding: 12px 14px;
+    color: #66778a;
+    background: #fbfcfd;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.medal-table th:first-child,
+.medal-table td:first-child { padding-left: 24px; }
+.medal-table td {
+    padding: 15px 14px;
+    vertical-align: top;
+    border-bottom: 1px solid #edf1f4;
+    font-size: 0.8rem;
+}
+
+.medal-table tbody tr:last-child td { border-bottom: 0; }
+.medal-table tbody tr:hover { background: #fbfcfe; }
+.year-cell { width: 72px; color: #385a78; font-weight: 800; font-variant-numeric: tabular-nums; }
+.name-cell { min-width: 180px; }
+.name-cell strong { display: block; font-size: 0.86rem; font-weight: 750; }
+.person-note { display: inline-block; margin-top: 5px; color: #8b6126; font-size: 0.68rem; }
+.areas-cell { min-width: 190px; }
+.area-tag {
+    display: inline-block;
+    margin: 0 4px 5px 0;
+    padding: 3px 7px;
+    color: #425f79;
+    background: var(--accent-soft);
+    border-radius: 999px;
+    font-size: 0.67rem;
+    line-height: 1.35;
+}
+.summary-cell { min-width: 330px; max-width: 570px; color: #4e5f72; line-height: 1.5; }
+.genealogy-cell { min-width: 150px; white-space: nowrap; }
+.genealogy-link { color: var(--accent); font-weight: 750; text-decoration: none; }
+.genealogy-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.genealogy-pending { color: #8793a1; font-size: 0.73rem; }
+
+.empty-state {
+    display: grid;
+    gap: 4px;
+    padding: 38px 20px;
+    color: var(--muted);
+    text-align: center;
+}
+.empty-state strong { color: var(--ink); }
+
+.editorial-note {
+    margin: 18px 2px 34px;
+    padding: 15px 18px;
+    color: #586b7e;
+    background: #eaf0f5;
+    border-left: 3px solid #829db5;
+    border-radius: 0 9px 9px 0;
+    font-size: 0.78rem;
+}
+
+.editorial-note strong { color: var(--ink); }
+
+.site-footer {
+    padding: 19px 0;
+    color: #d3dce5;
+    background: #17243a;
+    font-size: 0.72rem;
+}
+
+.footer-inner { display: flex; justify-content: space-between; gap: 12px; }
+
+@media (max-width: 950px) {
+    .filters { grid-template-columns: 1fr 1fr; }
+    .search-control { grid-column: 1 / -1; }
+    .clear-button { width: 100%; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .stat-card-wide { grid-column: 1 / -1; }
+}
+
+@media (max-width: 650px) {
+    .header-inner,
+    .page-content,
+    .footer-inner { width: min(100% - 30px, 1440px); }
+    .site-header { padding: 34px 0 29px; }
+    .intro-section { align-items: flex-start; flex-direction: column; gap: 12px; padding-top: 28px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
+    .stat-card { min-height: 112px; padding: 14px; }
+    .stat-card-wide { grid-column: 1 / -1; }
+    .catalog-heading { align-items: flex-start; flex-direction: column; padding: 20px 17px 14px; gap: 7px; }
+    .filters { grid-template-columns: 1fr; padding: 14px 17px; }
+    .search-control { grid-column: auto; }
+    .medal-table th,
+    .medal-table td { padding-right: 12px; padding-left: 12px; }
+    .medal-table th:first-child,
+    .medal-table td:first-child { padding-left: 17px; }
+    .footer-inner { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+}

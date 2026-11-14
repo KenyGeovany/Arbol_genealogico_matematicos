@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Explorador interactivo de genealogías matemáticas.">
-    <title>Genealogía matemática · Terence Tao</title>
+    <title>Genealogía matemática</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header class="site-header">
         <div class="header-inner">
             <p class="eyebrow">Archivo de genealogías matemáticas</p>
-            <h1>Genealogía de Terence Tao</h1>
+            <h1>Genealogía de Matemáticos</h1>
             <p class="intro">
                 Explora las conexiones del esquema genealógico. Selecciona un matemático
                 para consultar su ficha o utiliza los símbolos ∞ enlazados para recorrer
@@ -24,7 +24,7 @@
         <section class="toolbar" aria-label="Controles del diagrama">
             <div class="toolbar-main">
                 <button id="treeBtn" class="button button-secondary active" type="button">
-                    Centrar árbol
+                    Ir al diagrama
                 </button>
                 <button id="backBtn" class="button button-secondary" type="button" style="display: none;">
                     ← Fragmento anterior
@@ -36,7 +36,7 @@
                 <input
                     id="search"
                     type="search"
-                    placeholder="Ej. Zygmund, Hilbert…"
+                    placeholder="Ej. Hilbert, Poincaré …"
                     autocomplete="off"
                 >
             </label>
@@ -52,7 +52,7 @@
                 Conexión dibujada en el esquema
             </span>
             <span class="legend-item">
-                <span class="legend-infinity" aria-hidden="true">∞</span>
+                <span class="legend-infinity" aria-hidden="true ">∞</span>
                 Antecedente o continuación
             </span>
         </div>
@@ -69,7 +69,7 @@
 
                 <div class="graph-viewport">
                     <svg
-                        id="graph"
+                            id="graph"
                         viewBox="0 0 1120 1500"
                         role="img"
                         aria-label="Diagrama interactivo de ascendencia matemática"
@@ -117,7 +117,7 @@
     </footer>
 
     <!-- Carga primero los datos y después la lógica de la aplicación. -->
-    <script src="TerenceTao_data.js"></script>
+    <script src="Tree_data.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

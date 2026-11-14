@@ -439,6 +439,19 @@ input {
     font-weight: 600;
 }
 
+.biography-photo { /* ++ */
+    display: block;
+    width: 100%;
+    max-height: 260px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center;
+    margin: 14px 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface-soft);
+}
+
 .tag {
     display: inline-block;
     margin-top: 2px;

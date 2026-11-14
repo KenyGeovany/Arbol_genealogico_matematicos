@@ -34,7 +34,10 @@
         const panel = document.getElementById("panel");
         const treeBtn = document.getElementById("treeBtn");
         const resetBtn = document.getElementById("resetBtn");
-
+        const legend = document.querySelector(".legend");
+        const toolbar = document.querySelector(".toolbar");
+        const graphViewport = document.querySelector(".graph-viewport");
+        
         const requiredElements = {
             graph: svg,
             edges: edgeGroup,
@@ -44,7 +47,8 @@
             search: searchInput,
             panel,
             treeBtn,
-            resetBtn
+            resetBtn,
+            graphViewport,
         };
 
         const missingElements = Object.entries(requiredElements)
@@ -107,6 +111,48 @@
             });
         }
 
+        let zoomLevel = 1;
+
+        function setZoom(nextZoom, event = null) {
+            const previousZoom = zoomLevel;
+
+            zoomLevel = Math.max(0.5, Math.min(3, nextZoom));
+
+            if (zoomLevel === previousZoom) return;
+
+            const rect = graphViewport.getBoundingClientRect();
+
+            // Punto sobre el que se aplicará el zoom.
+            const localX = event
+                ? event.clientX - rect.left
+                : graphViewport.clientWidth / 2;
+
+            const localY = event
+                ? event.clientY - rect.top
+                : graphViewport.clientHeight / 2;
+
+            const pointX = graphViewport.scrollLeft + localX;
+            const pointY = graphViewport.scrollTop + localY;
+
+            // Escalar el SVG sin modificar el CSS.
+            svg.style.width = `${100 * zoomLevel}%`;
+            svg.style.minWidth = `${760 * zoomLevel}px`;
+
+            requestAnimationFrame(() => {
+                const ratio = zoomLevel / previousZoom;
+
+                // Mantener el punto del cursor como centro del zoom.
+                graphViewport.scrollLeft = pointX * ratio - localX;
+                graphViewport.scrollTop = pointY * ratio - localY;
+            });
+        }
+
+        function scrollGraphToBottom() {
+            requestAnimationFrame(() => {
+                graphViewport.scrollTop = graphViewport.scrollHeight;
+            });
+        }
+
         function escapeHTML(value) {
             return String(value ?? "").replace(/[&<>"']/g, character => ({
                 "&": "&amp;",
@@ -153,10 +199,19 @@
                 ? connections.map(connection => `<span>${connection}</span>`).join("<br>")
                 : "Sin conexiones registradas en este fragmento.";
 
+            const portraitHTML = person.photo /* ++ */
+                ? `<img
+                class="biography-photo"
+                src="${escapeHTML(person.photo)}"
+                alt="Retrato de ${escapeHTML(person.name)}"
+                loading="lazy"
+                  >`
+                : `<div class="portrait">${escapeHTML(initials)}</div>`;
+
             panel.innerHTML = `
                 <h2>${escapeHTML(person.name)}</h2>
                 <div class="dates">${escapeHTML(person.dates || "Fechas por verificar")}</div>
-                <div class="portrait">${escapeHTML(initials)}</div>
+                ${portraitHTML}
                 <span class="tag">${escapeHTML(person.kind || "Matemático")}</span>
                 <h3>Biografía</h3>
                 <p>${escapeHTML(person.bio || "Biografía pendiente de documentación.")}</p>
@@ -165,6 +220,16 @@
                 <h3>Conexiones en este fragmento</h3>
                 <p>${connectionsHTML}</p>
             `;
+
+            const photo = panel.querySelector(".biography-photo");
+            if (photo) {
+                photo.addEventListener("error", () => {
+                    const fallback = document.createElement("div");
+                    fallback.className = "portrait";
+                    fallback.textContent = initials;
+                    photo.replaceWith(fallback);
+                }, { once: true });
+            }
         }
 
         function drawNodes() {
@@ -339,6 +404,8 @@
         }
 
         function showTree(treeId, targetNode = null, remember = true) {
+            const previousScrollY = window.scrollY;
+            
             if (!trees[treeId]) {
                 console.error("No existe el fragmento solicitado:", treeId);
                 return;
@@ -364,8 +431,10 @@
             if (targetNode && currentMap()[targetNode]) {
                 selectPerson(targetNode);
             }
-
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            scrollGraphToBottom();
+            requestAnimationFrame(() => {
+                window.scrollTo(0, previousScrollY);
+            });
         }
 
         function goBack() {
@@ -407,6 +476,7 @@
             setTreePositions();
             showInitialPanel();
             draw();
+            scrollGraphToBottom();
         }
 
         // Controles de la interfaz.
@@ -417,9 +487,81 @@
         resetBtn.addEventListener("click", resetCurrentTree);
 
         treeBtn.addEventListener("click", () => {
-            resetCurrentTree();
-            treeBtn.classList.add("active");
+            if (!legend) return;
+
+            const isSticky = toolbar &&
+                ["sticky", "fixed"].includes(getComputedStyle(toolbar).position);
+
+            const offset = isSticky
+                ? toolbar.getBoundingClientRect().height - 8
+                : -8;
+
+            const target = legend.getBoundingClientRect().top +
+                           window.scrollY - offset;
+
+            window.scrollTo({
+                top: Math.max(0, target),
+                behavior: "smooth"
+            });
         });
+
+        graphViewport.addEventListener("wheel", event => {
+            // Ctrl + rueda o Cmd + rueda en Mac.
+            if (!event.ctrlKey && !event.metaKey) return;
+        
+            event.preventDefault();
+
+            const factor = event.deltaY < 0 ? 1.12 : 1 / 1.12;
+
+            setZoom(zoomLevel * factor, event);
+
+        }, { passive: false });
+
+        // Desplazamiento del diagrama mediante arrastre del mouse.
+        let dragState = null;
+
+        graphViewport.style.cursor = "grab";
+
+        graphViewport.addEventListener("pointerdown", event => {
+            if (event.pointerType !== "mouse" || event.button !== 0) return;
+
+            // No iniciar el arrastre sobre matemáticos o infinitos:
+            // así sus clics siguen funcionando normalmente.
+            if (event.target.closest(".node")) return;
+
+            dragState = {
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startY: event.clientY,
+                scrollLeft: graphViewport.scrollLeft,
+                scrollTop: graphViewport.scrollTop
+            };
+
+            graphViewport.setPointerCapture(event.pointerId);
+        });
+
+        graphViewport.addEventListener("pointermove", event => {
+            if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+            const dx = event.clientX - dragState.startX;
+            const dy = event.clientY - dragState.startY;
+
+            graphViewport.scrollLeft = dragState.scrollLeft - dx;
+            graphViewport.scrollTop = dragState.scrollTop - dy;
+
+            graphViewport.style.cursor = "grabbing";
+            event.preventDefault();
+        });
+
+        function stopGraphDrag(event) {
+            if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+            dragState = null;
+            graphViewport.style.cursor = "grab";
+        }
+
+        graphViewport.addEventListener("pointerup", stopGraphDrag);
+        graphViewport.addEventListener("pointercancel", stopGraphDrag);
 
         // Iniciar la aplicación en el fragmento señalado por data.js.
         setTreePositions();
@@ -427,6 +569,7 @@
         backBtn.style.display = "none";
         showInitialPanel();
         draw();
+        scrollGraphToBottom();
     }
 
     // Permite incluir app.js al final del body o cargarlo con defer desde head.
