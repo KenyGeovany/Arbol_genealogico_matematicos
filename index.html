@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Genealogía de las Matemáticas</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header><div class="kicker">Mapa histórico · versión revisada</div><h1>Genealogía de las Matemáticas</h1><p>Reconstrucción digital del esquema manuscrito. Selecciona cualquier nombre para consultar su ficha. Las flechas conservan la dirección dibujada en el original.</p></header>
+<div class="toolbar"><button id="treeBtn" class="active">Vista de árbol</button><input id="search" type="search" placeholder="Buscar matemático…"><button id="resetBtn">Restablecer</button><button id="backBtn" style="display:none">← Árbol principal</button></div>
+<main><div class="legend"><span class="key"><i class="sample"></i> Relación dibujada en el manuscrito</span><span class="key"><i class="sample influence"></i> Influencia intelectual (por clasificar)</span></div><div class="workspace"><section class="canvas"><div class="canvashead"><span id="viewLabel">Distribución reconstruida a partir de la fotografía</span><span>Selecciona un nodo</span></div><svg id="graph" viewBox="0 0 1120 1320" role="img" aria-label="Árbol genealógico interactivo de matemáticos"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#315b82" stroke-width="1.2"/></marker></defs><g id="edges"></g><g id="nodes"></g></svg></section><aside class="panel" id="panel"><div class="hint">Selecciona un matemático en el diagrama para abrir su ficha.</div><div class="portrait">∑</div><p class="hint">Las biografías y bibliografías se completarán con fuentes históricas verificadas; no se han inventado datos para los nombres dudosos.</p></aside></div><p class="note">Nota de edición: las flechas se transcribieron visualmente. Una flecha representa aquí la conexión de tu esquema, no necesariamente una relación maestro–discípulo demostrada. Los símbolos ∞ indican antecedentes no especificados y permiten abrir el segundo árbol.</p></main>
+<script src="data.js"></script><script src="app.js"></script>
+</body></html>
